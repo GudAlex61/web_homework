@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %}Настройки профиля - Pupkin Overflow{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <h1>Настройки профиля</h1>
+        
+        <form>
+            <div class="mb-3">
+                <label for="username" class="form-label">Имя пользователя</label>
+                <input type="text" class="form-control" id="username" value="{{ user_data.username }}">
+                <div class="form-hint">Имя пользователя будет отображаться в вашем профиле.</div>
+            </div>
+            
+            <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" class="form-control" id="email" value="{{ user_data.email }}">
+                <div class="form-hint">На этот адрес будут приходить уведомления.</div>
+            </div>
+            
+            <div class="mb-3">
+                <label for="bio" class="form-label">О себе</label>
+                <textarea class="form-control" id="bio" rows="4" placeholder="Расскажите о себе...">Фронтенд разработчик с опытом работы с HTML, CSS и JavaScript.</textarea>
+                <div class="form-hint">Краткое описание вашего опыта и интересов.</div>
+            </div>
+            
+            <div class="mb-3">
+                <label for="location" class="form-label">Местоположение</label>
+                <input type="text" class="form-control" id="location" value="Москва, Россия">
+            </div>
+            
+            <button type="submit" class="btn btn-primary">Сохранить изменения</button>
+        </form>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="sidebar-block">
+            <h5>Аватар</h5>
+            <div class="d-flex align-items-center mb-3">
+                <span class="user-avatar-large"></span>
+                <div>
+                    <p class="mb-0"><strong>{{ user_data.username }}</strong></p>
+                    <p class="text-muted mb-0">Участник с {{ user_data.member_since }}</p>
+                </div>
+            </div>
+            <button class="btn btn-outline-secondary btn-sm">Загрузить новый аватар</button>
+        </div>
+        
+        <div class="sidebar-block">
+            <h5>Статистика</h5>
+            <div class="user-item">
+                <strong>{{ user_data.reputation }}</strong> репутации
+            </div>
+            <div class="user-item">
+                <strong>{{ user_data.questions }}</strong> заданных вопросов
+            </div>
+            <div class="user-item">
+                <strong>{{ user_data.answers }}</strong> данных ответов
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

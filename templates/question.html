@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block title %}{{ question.title }} - Pupkin Overflow{% endblock %}
+
+{% block content %}
+<div class="card shadow-sm mb-3">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-2 text-center">
+                <div class="fw-bold fs-5">{{ question.votes }}</div>
+                <div class="text-muted small">голосов</div>
+                <div class="fw-bold fs-5 mt-2">{{ question.answers }}</div>
+                <div class="text-muted small">ответов</div>
+                <div class="fw-bold fs-5 mt-2">{{ question.views }}</div>
+                <div class="text-muted small">просмотров</div>
+            </div>
+            <div class="col-10">
+                <h1>{{ question.title }}</h1>
+                <p>{{ question.text }}</p>
+                
+                <div class="d-flex justify-content-between mt-3">
+                    <div>
+                        {% for tag in question.tags %}
+                        <a href="{% url 'app:tag' tag %}" class="tag">{{ tag }}</a>
+                        {% endfor %}
+                    </div>
+                    <div class="text-muted">
+                        <span class="user-avatar"></span>
+                        <a href="#">{{ question.user }}</a> {{ question.date }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<h2 class="mt-4">Ответы ({{ answers.paginator.count }})</h2>
+
+{% for answer in answers %}
+<div class="card shadow-sm mb-3">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-2 text-center">
+                <div class="fw-bold fs-5">{{ answer.votes }}</div>
+                <div class="text-muted small">голосов</div>
+                {% if answer.accepted %}
+                <div class="mt-2">
+                    <span class="badge bg-success">✓ Принят</span>
+                </div>
+                {% endif %}
+            </div>
+            <div class="col-10">
+                <p>{{ answer.text }}</p>
+                <div class="text-muted">
+                    <span class="user-avatar"></span>
+                    <a href="#">{{ answer.user }}</a> {{ answer.date }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+<!-- Пагинация для ответов -->
+{% if answers.has_other_pages %}
+<nav aria-label="Answers pagination" class="mt-4">
+    <ul class="pagination">
+        {% if answers.has_previous %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ answers.previous_page_number }}">Предыдущая</a>
+        </li>
+        {% endif %}
+        
+        {% for num in answers.paginator.page_range %}
+        <li class="page-item {% if answers.number == num %}active{% endif %}">
+            <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+        </li>
+        {% endfor %}
+        
+        {% if answers.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ answers.next_page_number }}">Следующая</a>
+        </li>
+        {% endif %}
+    </ul>
+</nav>
+{% endif %}
+
+<!-- Форма ответа -->
+<div class="card mt-4">
+    <div class="card-body">
+        <h3 class="card-title">Ваш ответ</h3>
+        <form>
+            <div class="mb-3">
+                <textarea class="form-control" rows="5" placeholder="Введите ваш ответ"></textarea>
+                <div class="form-hint">Минимум 30 символов</div>
+            </div>
+            <button type="submit" class="btn btn-primary">Отправить ответ</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

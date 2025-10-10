@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title|default:"Pupkin Overflow - Главная" }}{% endblock %}
+
+{% block content %}
+<h1>{{ title|default:"Новые вопросы" }}</h1>
+
+{% for question in questions %}
+<div class="card shadow-sm mb-3">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-2 text-center">
+                <div class="fw-bold fs-5">{{ question.votes }}</div>
+                <div class="text-muted small">голосов</div>
+                <div class="fw-bold fs-5 mt-2">{{ question.answers }}</div>
+                <div class="text-muted small">ответов</div>
+                <div class="fw-bold fs-5 mt-2">{{ question.views }}</div>
+                <div class="text-muted small">просмотров</div>
+            </div>
+            <div class="col-10">
+                <h5><a href="{% url 'app:question' question.id %}" class="question-title">{{ question.title }}</a></h5>
+                <p>{{ question.text }}</p>
+                <div class="d-flex justify-content-between">
+                    <div>
+                        {% for tag in question.tags %}
+                        <a href="{% url 'app:tag' tag %}" class="tag">{{ tag }}</a>
+                        {% endfor %}
+                    </div>
+                    <div class="text-muted">
+                        <span class="user-avatar"></span>
+                        <a href="#">{{ question.user }}</a> {{ question.date }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+<!-- Пагинация -->
+{% if questions.has_other_pages %}
+<nav aria-label="Page navigation" class="mt-4">
+    <ul class="pagination">
+        {% if questions.has_previous %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ questions.previous_page_number }}">Предыдущая</a>
+        </li>
+        {% endif %}
+        
+        {% for num in questions.paginator.page_range %}
+        <li class="page-item {% if questions.number == num %}active{% endif %}">
+            <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+        </li>
+        {% endfor %}
+        
+        {% if questions.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ questions.next_page_number }}">Следующая</a>
+        </li>
+        {% endif %}
+    </ul>
+</nav>
+{% endif %}
+{% endblock %}

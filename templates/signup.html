@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Регистрация - Pupkin Overflow</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+        .navbar-brand {
+            font-weight: bold;
+            color: #f48024 !important;
+        }
+        .navbar {
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .form-error {
+            color: #dc3545;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+        }
+        .form-hint {
+            color: #6c757d;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+        }
+        .btn-primary {
+            background-color: #0a95ff;
+            border-color: #0a95ff;
+        }
+        .btn-primary:hover {
+            background-color: #0074cc;
+            border-color: #0074cc;
+        }
+        .signup-container {
+            max-width: 500px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <!-- Навигационная панель -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'app:index' %}">Pupkin Overflow</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'app:index' %}">Главная</a>
+                    </li>
+                </ul>
+                <div class="navbar-nav">
+                    <a class="nav-link" href="{% url 'app:login' %}">Войти</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Основной контент -->
+    <div class="container">
+        <div class="signup-container">
+            <h1 class="text-center mb-4">Регистрация</h1>
+            
+            <form>
+                <div class="mb-3">
+                    <label for="username" class="form-label">Имя пользователя</label>
+                    <input type="text" class="form-control" id="username" placeholder="Придумайте имя пользователя">
+                    <div class="form-hint">Имя пользователя будет отображаться в вашем профиле.</div>
+                    <div class="form-error">Это имя пользователя уже занято</div>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="email" placeholder="Введите ваш email">
+                    <div class="form-error">Некорректный email</div>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="password" class="form-label">Пароль</label>
+                    <input type="password" class="form-control" id="password" placeholder="Придумайте пароль">
+                    <div class="form-hint">Минимум 8 символов, включая цифры и буквы</div>
+                    <div class="form-error">Пароль слишком простой</div>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="confirm-password" class="form-label">Подтверждение пароля</label>
+                    <input type="password" class="form-control" id="confirm-password" placeholder="Повторите пароль">
+                    <div class="form-error">Пароли не совпадают</div>
+                </div>
+                
+                <div class="mb-3 form-check">
+                    <input type="checkbox" class="form-check-input" id="agree">
+                    <label class="form-check-label" for="agree">Я согласен с <a href="#">условиями использования</a></label>
+                    <div class="form-error">Необходимо принять условия использования</div>
+                </div>
+                
+                <button type="submit" class="btn btn-primary w-100">Зарегистрироваться</button>
+                
+                <div class="text-center mt-4">
+                    <p>Уже есть аккаунт? <a href="{% url 'app:login' %}">Войдите</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

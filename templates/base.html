@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Pupkin Overflow{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+        .navbar-brand {
+            font-weight: bold;
+            color: #f48024 !important;
+        }
+        .navbar {
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: #6c757d;
+            display: inline-block;
+            margin-right: 5px;
+        }
+        .tag {
+            background-color: #e1ecf4;
+            color: #39739d;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 0.8rem;
+            margin-right: 5px;
+            text-decoration: none;
+            display: inline-block;
+            margin-bottom: 5px;
+        }
+        .tag:hover {
+            background-color: #d1e5f1;
+        }
+        .stats {
+            text-align: center;
+            width: 60px;
+        }
+        .stats-value {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        .stats-label {
+            font-size: 0.8rem;
+            color: #6c757d;
+        }
+        .sidebar-block {
+            background-color: white;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .user-item {
+            padding: 5px 0;
+        }
+        .form-error {
+            color: #dc3545;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+        }
+        .form-hint {
+            color: #6c757d;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+        }
+        .question-title {
+            color: #0074cc;
+            text-decoration: none;
+        }
+        .question-title:hover {
+            color: #0a95ff;
+        }
+        .code-block {
+            background-color: #f6f8fa;
+            border-radius: 3px;
+            padding: 12px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+        }
+        .user-avatar-large {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background-color: #6c757d;
+            display: inline-block;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Навигационная панель -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'app:index' %}">Pupkin Overflow</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'app:index' %}">Новые вопросы</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'app:hot' %}">Популярные вопросы</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'app:ask' %}">Задать вопрос</a>
+                    </li>
+                </ul>
+                <form class="d-flex me-2">
+                    <input class="form-control me-2" type="search" placeholder="Поиск..." aria-label="Search">
+                    <button class="btn btn-outline-success" type="submit">Найти</button>
+                </form>
+                
+                <!-- Блок для авторизованного пользователя -->
+                {% if user.is_authenticated %}
+                <div class="navbar-nav">
+                    <span class="user-avatar"></span>
+                    <a class="nav-link" href="{% url 'app:settings' %}">{{ user.username }}</a>
+                    <a class="nav-link" href="{% url 'app:logout' %}">Выйти</a>
+                </div>
+                {% else %}
+                <!-- Блок для неавторизованного пользователя -->
+                <div class="navbar-nav">
+                    <a class="nav-link" href="{% url 'app:login' %}">Войти</a>
+                    <a class="nav-link" href="{% url 'app:signup' %}">Регистрация</a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <!-- Основной контент -->
+    <div class="container mt-4">
+        <div class="row">
+            <!-- Левая колонка с контентом -->
+            <div class="col-md-9">
+                {% block content %}{% endblock %}
+            </div>
+            
+            <!-- Правая колонка с сайдбаром -->
+            <div class="col-md-3">
+                <!-- Популярные теги -->
+                <div class="sidebar-block">
+                    <h5>Популярные теги</h5>
+                    <div>
+                        <a href="{% url 'app:tag' 'javascript' %}" class="tag">javascript</a>
+                        <a href="{% url 'app:tag' 'python' %}" class="tag">python</a>
+                        <a href="{% url 'app:tag' 'java' %}" class="tag">java</a>
+                        <a href="{% url 'app:tag' 'html' %}" class="tag">html</a>
+                        <a href="{% url 'app:tag' 'css' %}" class="tag">css</a>
+                        <a href="{% url 'app:tag' 'bootstrap' %}" class="tag">bootstrap</a>
+                        <a href="{% url 'app:tag' 'django' %}" class="tag">django</a>
+                        <a href="{% url 'app:tag' 'flask' %}" class="tag">flask</a>
+                        <a href="{% url 'app:tag' 'react' %}" class="tag">react</a>
+                        <a href="{% url 'app:tag' 'vue' %}" class="tag">vue</a>
+                    </div>
+                </div>
+                
+                <!-- Лучшие пользователи -->
+                <div class="sidebar-block">
+                    <h5>Лучшие пользователи</h5>
+                    <div class="user-item">
+                        <span class="user-avatar"></span>
+                        <a href="#">ziontab</a> <span class="badge bg-primary">1256</span>
+                    </div>
+                    <div class="user-item">
+                        <span class="user-avatar"></span>
+                        <a href="#">alex_dev</a> <span class="badge bg-primary">987</span>
+                    </div>
+                    <div class="user-item">
+                        <span class="user-avatar"></span>
+                        <a href="#">web_master</a> <span class="badge bg-primary">754</span>
+                    </div>
+                    <div class="user-item">
+                        <span class="user-avatar"></span>
+                        <a href="#">pythonista</a> <span class="badge bg-primary">632</span>
+                    </div>
+                    <div class="user-item">
+                        <span class="user-avatar"></span>
+                        <a href="#">js_ninja</a> <span class="badge bg-primary">521</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
