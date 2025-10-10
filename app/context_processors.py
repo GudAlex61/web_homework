@@ -3,7 +3,7 @@ def user_context(request):
     class MockUser:
         def __init__(self):
             self.username = "ziontab"
-            self.is_authenticated = True
+            self.is_authenticated = True #False чтобы не авторизованный режзим
             self.email = "ziontab@example.com"
     
     return {
