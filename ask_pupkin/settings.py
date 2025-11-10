@@ -9,7 +9,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-# Добавляем приложение app
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -17,7 +16,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'app',  # ← ДОБАВИТЬ ЭТУ СТРОКУ
+    'app',
 ]
 
 MIDDLEWARE = [
@@ -32,11 +31,10 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'ask_pupkin.urls'
 
-# Настраиваем пути к шаблонам
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],  # ← ВАЖНО: добавить эту строку
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -77,14 +75,12 @@ TIME_ZONE = 'Europe/Moscow'
 USE_I18N = True
 USE_TZ = True
 
-# Настройки статических файлов
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),  # ← ВАЖНО: добавить эту строку
+    os.path.join(BASE_DIR, 'static'),
 ]
 
-# Настройки медиа-файлов (загруженных пользователями)
 MEDIA_URL = '/uploads/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')  # ← ВАЖНО: добавить эту строку
+MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
