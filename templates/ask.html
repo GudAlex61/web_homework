@@ -1,32 +1,58 @@
 {% extends "base.html" %}
 
-{% block title %}Задать вопрос - Pupkin Overflow{% endblock %}
+{% block title %}Задать вопрос - TP Tasks{% endblock %}
 
 {% block content %}
-<h1>Задать вопрос</h1>
+<div class="row">
+    <div class="col-md-9">
+        <h1>Задать вопрос</h1>
 
-<form>
-    <div class="mb-3">
-        <label for="title" class="form-label">Заголовок</label>
-        <input type="text" class="form-control" id="title" placeholder="Например: Как создать адаптивную верстку с Bootstrap?">
-        <div class="form-hint">Будьте конкретны и представьте, что вы задаете вопрос другому человеку.</div>
-        <div class="form-error">Заголовок должен содержать минимум 15 символов</div>
+        <form>
+            <div class="mb-3">
+                <label for="title" class="form-label">Заголовок</label>
+                <input type="text" class="form-control" id="title" placeholder="Например: Как создать адаптивную верстку с Bootstrap?">
+                <div class="form-hint">Будьте конкретны и представьте, что вы задаете вопрос другому человеку.</div>
+                <div class="form-error">Заголовок должен содержать минимум 15 символов</div>
+            </div>
+            
+            <div class="mb-3">
+                <label for="body" class="form-label">Текст вопроса</label>
+                <textarea class="form-control" id="body" rows="10" placeholder="Опишите вашу проблему подробно..."></textarea>
+                <div class="form-hint">Включите всю информацию, необходимую для ответа на ваш вопрос.</div>
+                <div class="form-error">Текст вопроса должен содержать минимум 30 символов</div>
+            </div>
+            
+            <div class="mb-3">
+                <label for="tags" class="form-label">Теги</label>
+                <input type="text" class="form-control" id="tags" placeholder="html, css, bootstrap">
+                <div class="form-hint">Добавьте до 5 тегов, описывающих ваш вопрос.</div>
+                <div class="form-error">Добавьте хотя бы один тег</div>
+            </div>
+            
+            <button type="submit" class="btn btn-primary">Отправить вопрос</button>
+        </form>
     </div>
     
-    <div class="mb-3">
-        <label for="body" class="form-label">Текст вопроса</label>
-        <textarea class="form-control" id="body" rows="10" placeholder="Опишите вашу проблему подробно..."></textarea>
-        <div class="form-hint">Включите всю информацию, необходимую для ответа на ваш вопрос.</div>
-        <div class="form-error">Текст вопроса должен содержать минимум 30 символов</div>
+    <div class="col-md-3">
+        <div class="sidebar-block">
+            <h5>Популярные теги</h5>
+            <div>
+                {% for tag in popular_tags %}
+                <a href="{% url 'app:tag' tag.name %}" class="tag">{{ tag.name }}</a>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <div class="sidebar-block">
+            <h5>Лучшие пользователи</h5>
+            {% for profile in best_users %}
+            <div class="user-item">
+                <span class="user-avatar"></span>
+                <a href="#">{{ profile.user.username }}</a>
+                <span class="badge bg-primary">{{ profile.total_rating }}</span>
+            </div>
+            {% endfor %}
+        </div>
     </div>
-    
-    <div class="mb-3">
-        <label for="tags" class="form-label">Теги</label>
-        <input type="text" class="form-control" id="tags" placeholder="html, css, bootstrap">
-        <div class="form-hint">Добавьте до 5 тегов, описывающих ваш вопрос.</div>
-        <div class="form-error">Добавьте хотя бы один тег</div>
-    </div>
-    
-    <button type="submit" class="btn btn-primary">Отправить вопрос</button>
-</form>
+</div>
 {% endblock %}

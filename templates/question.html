@@ -1,32 +1,38 @@
 {% extends "base.html" %}
 
-{% block title %}{{ question.title }} - Pupkin Overflow{% endblock %}
+{% block title %}{{ question.title }} - TP Tasks{% endblock %}
 
 {% block content %}
 <div class="card shadow-sm mb-3">
     <div class="card-body">
         <div class="row">
             <div class="col-2 text-center">
-                <div class="fw-bold fs-5">{{ question.votes }}</div>
+                <div class="fw-bold fs-5">{{ question.rating }}</div>
                 <div class="text-muted small">голосов</div>
-                <div class="fw-bold fs-5 mt-2">{{ question.answers }}</div>
+                <div class="fw-bold fs-5 mt-2">{{ question.answers_count }}</div>
                 <div class="text-muted small">ответов</div>
-                <div class="fw-bold fs-5 mt-2">{{ question.views }}</div>
+                <div class="fw-bold fs-5 mt-2">{{ question.views|default:"0" }}</div>
                 <div class="text-muted small">просмотров</div>
             </div>
             <div class="col-10">
                 <h1>{{ question.title }}</h1>
                 <p>{{ question.text }}</p>
                 
-                <div class="d-flex justify-content-between mt-3">
+                {% if question.tags.all %}
+                <div class="mb-3">
+                    {% for tag in question.tags.all %}
+                    <a href="{% url 'app:tag' tag.name %}" class="tag">{{ tag.name }}</a>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                
+                <div class="d-flex justify-content-between text-muted">
                     <div>
-                        {% for tag in question.tags %}
-                        <a href="{% url 'app:tag' tag %}" class="tag">{{ tag }}</a>
-                        {% endfor %}
-                    </div>
-                    <div class="text-muted">
                         <span class="user-avatar"></span>
-                        <a href="#">{{ question.user }}</a> {{ question.date }}
+                        <a href="#">{{ question.author.user.username }}</a>
+                    </div>
+                    <div>
+                        <span>задан {{ question.created_date|timesince }} назад</span>
                     </div>
                 </div>
             </div>
@@ -37,13 +43,13 @@
 <h2 class="mt-4">Ответы ({{ answers.paginator.count }})</h2>
 
 {% for answer in answers %}
-<div class="card shadow-sm mb-3">
+<div class="card shadow-sm mb-3 {% if answer.is_correct %}correct-answer{% endif %}">
     <div class="card-body">
         <div class="row">
             <div class="col-2 text-center">
-                <div class="fw-bold fs-5">{{ answer.votes }}</div>
+                <div class="fw-bold fs-5">{{ answer.rating }}</div>
                 <div class="text-muted small">голосов</div>
-                {% if answer.accepted %}
+                {% if answer.is_correct %}
                 <div class="mt-2">
                     <span class="badge bg-success">✓ Принят</span>
                 </div>
@@ -53,35 +59,72 @@
                 <p>{{ answer.text }}</p>
                 <div class="text-muted">
                     <span class="user-avatar"></span>
-                    <a href="#">{{ answer.user }}</a> {{ answer.date }}
+                    <a href="#">{{ answer.author.user.username }}</a>
+                    <span>{{ answer.created_date|timesince }} назад</span>
                 </div>
             </div>
         </div>
     </div>
 </div>
+{% empty %}
+<div class="alert alert-info">
+    Пока нет ответов на этот вопрос. Будьте первым, кто ответит!
+</div>
 {% endfor %}
 
 {% if answers.has_other_pages %}
 <nav aria-label="Answers pagination" class="mt-4">
-    <ul class="pagination">
-        {% if answers.has_previous %}
-        <li class="page-item">
-            <a class="page-link" href="?page={{ answers.previous_page_number }}">Предыдущая</a>
-        </li>
-        {% endif %}
+    <div class="d-flex justify-content-between align-items-center">
+        <div>
+            <span class="text-muted">
+                Страница {{ answers.number }} из {{ answers.paginator.num_pages }}
+            </span>
+        </div>
         
-        {% for num in answers.paginator.page_range %}
-        <li class="page-item {% if answers.number == num %}active{% endif %}">
-            <a class="page-link" href="?page={{ num }}">{{ num }}</a>
-        </li>
-        {% endfor %}
-        
-        {% if answers.has_next %}
-        <li class="page-item">
-            <a class="page-link" href="?page={{ answers.next_page_number }}">Следующая</a>
-        </li>
-        {% endif %}
-    </ul>
+        <ul class="pagination mb-0">
+            {% if answers.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page=1" title="Первая страница">«</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ answers.previous_page_number }}" title="Предыдущая страница">‹</a>
+                </li>
+            {% else %}
+                <li class="page-item disabled">
+                    <span class="page-link">«</span>
+                </li>
+                <li class="page-item disabled">
+                    <span class="page-link">‹</span>
+                </li>
+            {% endif %}
+
+            <li class="page-item">
+                <form method="get" class="d-flex" style="min-width: 120px;">
+                    <input type="number" name="page" class="form-control form-control-sm" 
+                           min="1" max="{{ answers.paginator.num_pages }}" 
+                           value="{{ answers.number }}" 
+                           style="width: 70px; text-align: center;">
+                    <button type="submit" class="btn btn-sm btn-outline-primary ms-1">→</button>
+                </form>
+            </li>
+
+            {% if answers.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ answers.next_page_number }}" title="Следующая страница">›</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ answers.paginator.num_pages }}" title="Последняя страница">»</a>
+                </li>
+            {% else %}
+                <li class="page-item disabled">
+                    <span class="page-link">›</span>
+                </li>
+                <li class="page-item disabled">
+                    <span class="page-link">»</span>
+                </li>
+            {% endif %}
+        </ul>
+    </div>
 </nav>
 {% endif %}
 

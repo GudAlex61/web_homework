@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Pupkin Overflow{% endblock %}</title>
+    <title>{% block title %}TP Tasks{% endblock %}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
@@ -94,13 +94,16 @@
             display: inline-block;
             margin-right: 10px;
         }
+        .correct-answer {
+            border-left: 4px solid #28a745;
+            background-color: #f8fff9;
+        }
     </style>
 </head>
 <body>
-    <!-- Навигационная панель -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container">
-            <a class="navbar-brand" href="{% url 'app:index' %}">Pupkin Overflow</a>
+            <a class="navbar-brand" href="{% url 'app:index' %}">TP Tasks</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -121,7 +124,6 @@
                     <button class="btn btn-outline-success" type="submit">Найти</button>
                 </form>
                 
-                <!-- Блок для авторизованного пользователя -->
                 {% if user.is_authenticated %}
                 <div class="navbar-nav">
                     <span class="user-avatar"></span>
@@ -129,7 +131,6 @@
                     <a class="nav-link" href="{% url 'app:logout' %}">Выйти</a>
                 </div>
                 {% else %}
-                <!-- Блок для неавторизованного пользователя -->
                 <div class="navbar-nav">
                     <a class="nav-link" href="{% url 'app:login' %}">Войти</a>
                     <a class="nav-link" href="{% url 'app:signup' %}">Регистрация</a>
@@ -139,56 +140,31 @@
         </div>
     </nav>
 
-    <!-- Основной контент -->
     <div class="container mt-4">
         <div class="row">
-            <!-- Левая колонка с контентом -->
             <div class="col-md-9">
                 {% block content %}{% endblock %}
             </div>
             
-            <!-- Правая колонка с сайдбаром -->
             <div class="col-md-3">
-                <!-- Популярные теги -->
                 <div class="sidebar-block">
                     <h5>Популярные теги</h5>
                     <div>
-                        <a href="{% url 'app:tag' 'javascript' %}" class="tag">javascript</a>
-                        <a href="{% url 'app:tag' 'python' %}" class="tag">python</a>
-                        <a href="{% url 'app:tag' 'java' %}" class="tag">java</a>
-                        <a href="{% url 'app:tag' 'html' %}" class="tag">html</a>
-                        <a href="{% url 'app:tag' 'css' %}" class="tag">css</a>
-                        <a href="{% url 'app:tag' 'bootstrap' %}" class="tag">bootstrap</a>
-                        <a href="{% url 'app:tag' 'django' %}" class="tag">django</a>
-                        <a href="{% url 'app:tag' 'flask' %}" class="tag">flask</a>
-                        <a href="{% url 'app:tag' 'react' %}" class="tag">react</a>
-                        <a href="{% url 'app:tag' 'vue' %}" class="tag">vue</a>
+                        {% for tag in popular_tags %}
+                        <a href="{% url 'app:tag' tag.name %}" class="tag">{{ tag.name }}</a>
+                        {% endfor %}
                     </div>
                 </div>
-                
-                <!-- Лучшие пользователи -->
+
                 <div class="sidebar-block">
                     <h5>Лучшие пользователи</h5>
+                    {% for profile in best_users %}
                     <div class="user-item">
                         <span class="user-avatar"></span>
-                        <a href="#">ziontab</a> <span class="badge bg-primary">1256</span>
+                        <a href="#">{{ profile.user.username }}</a>
+                        <span class="badge bg-primary">{{ profile.total_rating }}</span>
                     </div>
-                    <div class="user-item">
-                        <span class="user-avatar"></span>
-                        <a href="#">alex_dev</a> <span class="badge bg-primary">987</span>
-                    </div>
-                    <div class="user-item">
-                        <span class="user-avatar"></span>
-                        <a href="#">web_master</a> <span class="badge bg-primary">754</span>
-                    </div>
-                    <div class="user-item">
-                        <span class="user-avatar"></span>
-                        <a href="#">pythonista</a> <span class="badge bg-primary">632</span>
-                    </div>
-                    <div class="user-item">
-                        <span class="user-avatar"></span>
-                        <a href="#">js_ninja</a> <span class="badge bg-primary">521</span>
-                    </div>
+                    {% endfor %}
                 </div>
             </div>
         </div>

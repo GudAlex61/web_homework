@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Настройки профиля - Pupkin Overflow{% endblock %}
+{% block title %}Настройки профиля - TP Tasks{% endblock %}
 
 {% block content %}
 <div class="row">
@@ -10,13 +10,13 @@
         <form>
             <div class="mb-3">
                 <label for="username" class="form-label">Имя пользователя</label>
-                <input type="text" class="form-control" id="username" value="{{ user_data.username }}">
+                <input type="text" class="form-control" id="username" value="{{ user.username }}">
                 <div class="form-hint">Имя пользователя будет отображаться в вашем профиле.</div>
             </div>
             
             <div class="mb-3">
                 <label for="email" class="form-label">Email</label>
-                <input type="email" class="form-control" id="email" value="{{ user_data.email }}">
+                <input type="email" class="form-control" id="email" value="{{ user.email }}">
                 <div class="form-hint">На этот адрес будут приходить уведомления.</div>
             </div>
             
@@ -31,6 +31,11 @@
                 <input type="text" class="form-control" id="location" value="Москва, Россия">
             </div>
             
+            <div class="mb-3">
+                <label for="website" class="form-label">Веб-сайт</label>
+                <input type="url" class="form-control" id="website" value="https://example.com">
+            </div>
+            
             <button type="submit" class="btn btn-primary">Сохранить изменения</button>
         </form>
     </div>
@@ -41,8 +46,8 @@
             <div class="d-flex align-items-center mb-3">
                 <span class="user-avatar-large"></span>
                 <div>
-                    <p class="mb-0"><strong>{{ user_data.username }}</strong></p>
-                    <p class="text-muted mb-0">Участник с {{ user_data.member_since }}</p>
+                    <p class="mb-0"><strong>{{ user.username }}</strong></p>
+                    <p class="text-muted mb-0">Участник с 2023</p>
                 </div>
             </div>
             <button class="btn btn-outline-secondary btn-sm">Загрузить новый аватар</button>
@@ -51,13 +56,13 @@
         <div class="sidebar-block">
             <h5>Статистика</h5>
             <div class="user-item">
-                <strong>{{ user_data.reputation }}</strong> репутации
+                <strong>{{ user_data.reputation|default:"1256" }}</strong> репутации
             </div>
             <div class="user-item">
-                <strong>{{ user_data.questions }}</strong> заданных вопросов
+                <strong>{{ user_data.questions|default:"42" }}</strong> заданных вопросов
             </div>
             <div class="user-item">
-                <strong>{{ user_data.answers }}</strong> данных ответов
+                <strong>{{ user_data.answers|default:"87" }}</strong> данных ответов
             </div>
         </div>
     </div>
